@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Investment Package</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: linear-gradient(to right, #1E3A8A, #9333EA, #E91E63); color: white; }
+        .container { max-width: 400px; margin: auto; padding: 20px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        input { width: 90%; padding: 10px; margin: 5px 0; border: none; border-radius: 5px; }
+        button { background-color: #E91E63; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; }
+        button:hover { background-color: #C2185B; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 id="packageTitle">Select Investment Amount</h2>
+        <p id="packageDetails">Please enter the amount you wish to invest within the allowed range.</p>
+        <input type="number" id="investmentAmount" placeholder="Enter amount" required><br>
+        <button onclick="confirmInvestment()">Confirm Investment</button>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const packageName = urlParams.get('package');
+        let minAmount = 1000;
+        let maxAmount = 1999;
+
+        if (packageName === "The Royal Dawn Package") {
+            minAmount = 1000;
+            maxAmount = 1999;
+        } else if (packageName === "The Crowned Legacy Package") {
+            minAmount = 2000;
+            maxAmount = 4999;
+        } else if (packageName === "The Emperor’s Blessing Package") {
+            minAmount = 5000;
+            maxAmount = 1000000;
+        }
+
+        document.getElementById("packageTitle").innerText = packageName;
+        document.getElementById("packageDetails").innerText = `Enter an amount between ${minAmount} KES and ${maxAmount} KES`;
+
+        function confirmInvestment() {
+            let amount = document.getElementById("investmentAmount").value;
+            if (amount >= minAmount && amount <= maxAmount) {
+                window.location.href = "dashboard.html";
+            } else {
+                alert(`Invalid amount. Please enter an amount between ${minAmount} KES and ${maxAmount} KES.`);
+            }
+        }
+    </script>
+</body>
+</html>
