@@ -71,30 +71,3 @@
         }
 
         function signup() {
-            let email = document.getElementById('signupEmail').value;
-            let phone = document.getElementById('phone').value;
-            let password = document.getElementById('signupPassword').value;
-            let confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!validateEmail(email) || !validatePhone(phone) || password !== confirmPassword) {
-                alert('Invalid input. Ensure email, phone, and passwords match.');
-                return;
-            }
-            localStorage.setItem(email, JSON.stringify({ phone, password }));
-            showLogin();
-        }
-
-        function login() {
-            let email = document.getElementById('loginEmail').value;
-            let password = document.getElementById('loginPassword').value;
-            let userData = localStorage.getItem(email);
-            
-            if (!userData || JSON.parse(userData).password !== password) {
-                alert('Invalid credentials');
-                return;
-            }
-            window.location.href = "investment.html";
-        }
-    </script>
-</body>
-</html>
