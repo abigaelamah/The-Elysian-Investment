@@ -3,62 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter Investment Amount</title>
+    <title>Elysian Investment</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: center; 
-            background: linear-gradient(to right, #1E3A8A, #9333EA, #E91E63); 
-            color: white; 
-        }
-        .container { 
-            max-width: 400px; 
-            margin: auto; 
-            padding: 20px; 
-            background: rgba(255, 255, 255, 0.2); 
-            border-radius: 10px; 
-        }
-        input, button { 
-            width: 90%; 
-            padding: 10px; 
-            margin: 5px 0; 
-            border: none; 
-            border-radius: 5px; 
-        }
-        button { background-color: #E91E63; color: white; cursor: pointer; }
-        button:hover { background-color: #C2185B; }
+        body { font-family: Arial, sans-serif; text-align: center; background: linear-gradient(to right, #1E3A8A, #9333EA, #E91E63); color: white; }
+        .container { max-width: 500px; margin: auto; padding: 20px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        button, input { width: 85%; padding: 10px; margin: 10px 0; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        button { background: gold; color: black; }
+        .hidden { display: none; }
+        .balance { font-size: 24px; font-weight: bold; color: gold; }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- Investment Plan Selection -->
+    <div id="page-investment" class="container">
+        <h2>Select an Investment Package</h2>
+        <button class="package" onclick="selectPackage('The Royal Dawn Package', 1000, 1999)">The Royal Dawn Package</button>
+        <button class="package" onclick="selectPackage('The Crowned Legacy Package', 2000, 4999)">The Crowned Legacy Package</button>
+        <button class="package" onclick="selectPackage('The Emperor’s Blessing Package', 5000, 1000000)">The Emperor’s Blessing Package</button>
+    </div>
+
+    <!-- Enter Investment Amount -->
+    <div id="page-amount" class="container hidden">
         <h2 id="packageTitle"></h2>
         <p id="packageDetails"></p>
-        <input type="number" id="investmentAmount" placeholder="Enter amount" required><br>
-        <button onclick="confirmInvestment()">Submit Investment</button>
+        <input type="number" id="investmentAmount" placeholder="Enter amount">
+        <button onclick="submitInvestment()">Submit Investment</button>
+    </div>
+
+    <!-- Deposit Funds -->
+    <div id="page-deposit" class="container hidden">
+        <h2>Deposit Funds</h2>
+        <p>To proceed, deposit your investment amount.</p>
+        <input type="number" id="depositAmount" placeholder="Enter deposit amount">
+        <button onclick="confirmDeposit()">Deposit & Continue</button>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="page-dashboard" class="container hidden">
+        <h2>Welcome, <span id="userName">User</span></h2>
+        <p>Your Account Balance: <span class="balance" id="accountBalance">0.00 KES</span></p>
+        <button onclick="showPage('page-deposit')">Deposit</button>
+        <button onclick="alert('Withdrawals feature coming soon.')">Withdraw</button>
     </div>
 
     <script>
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const packageName = urlParams.get('package');
-        const minAmount = parseInt(urlParams.get('min'), 10);
-        const maxAmount = parseInt(urlParams.get('max'), 10);
+        function showPage(pageId) {
+            document.getElementById("page-investment").classList.add("hidden");
+            document.getElementById("page-amount").classList.add("hidden");
+            document.getElementById("page-deposit").classList.add("hidden");
+            document.getElementById("page-dashboard").classList.add("hidden");
+            document.getElementById(pageId).classList.remove("hidden");
+        }
 
-        // Display package details
-        document.getElementById("packageTitle").innerText = packageName;
-        document.getElementById("packageDetails").innerText = `Enter an amount between ${minAmount} KES and ${maxAmount} KES`;
+        function selectPackage(packageName, min, max) {
+            localStorage.setItem("selectedPackage", packageName);
+            localStorage.setItem("minAmount", min);
+            localStorage.setItem("maxAmount", max);
+            document.getElementById("packageTitle").innerText = packageName;
+            document.getElementById("packageDetails").innerText = `Enter an amount between ${min} KES and ${max} KES`;
+            showPage("page-amount");
+        }
 
-        function confirmInvestment() {
+        function submitInvestment() {
             let amount = parseInt(document.getElementById("investmentAmount").value, 10);
+            let minAmount = parseInt(localStorage.getItem("minAmount"), 10);
+            let maxAmount = parseInt(localStorage.getItem("maxAmount"), 10);
 
             if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
-                alert(`Invalid amount! Enter an amount between ${minAmount} KES and ${maxAmount} KES.`);
+                alert(`Invalid amount! Enter between ${minAmount} KES and ${maxAmount} KES.`);
                 return;
             }
 
-            // Redirect to dashboard
-            window.location.href = "dashboard.html";
+            localStorage.setItem("investmentAmount", amount);
+            showPage("page-deposit");
+        }
+
+        function confirmDeposit() {
+            let deposit = parseInt(document.getElementById("depositAmount").value, 10);
+
+            if (isNaN(deposit) || deposit <= 0) {
+                alert("Please enter a valid deposit amount.");
+                return;
+            }
+
+            localStorage.setItem("accountBalance", deposit);
+            document.getElementById("accountBalance").innerText = deposit + " KES";
+            showPage("page-dashboard");
         }
     </script>
 
