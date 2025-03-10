@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elysian Investment Plans</title>
+    <title>Enter Investment Amount</title>
     <style>
         body { 
             font-family: Arial, sans-serif; 
@@ -12,37 +12,11 @@
             color: white; 
         }
         .container { 
-            max-width: 800px; 
+            max-width: 400px; 
             margin: auto; 
             padding: 20px; 
-        }
-        .package { 
             background: rgba(255, 255, 255, 0.2); 
-            padding: 15px; 
-            margin: 10px; 
             border-radius: 10px; 
-        }
-        .package img {
-            width: 100px;
-            height: 100px;
-        }
-        .invest-btn { 
-            background-color: #FFD700; 
-            color: black; 
-            padding: 10px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .hidden { display: none; } /* Hide elements initially */
-        .amount-input { 
-            background: rgba(255, 255, 255, 0.2); 
-            padding: 15px; 
-            border-radius: 10px; 
-            max-width: 400px; 
-            margin: auto;
         }
         input, button { 
             width: 90%; 
@@ -58,68 +32,22 @@
 <body>
 
     <div class="container">
-        <h1>Welcome to Elysian Investments</h1>
-        <p>Choose an investment package that suits you best.</p>
-
-        <!-- Investment Packages -->
-        <h2>Daily Packages</h2>
-        <div class="package">
-            <img src="https://via.placeholder.com/100x100" alt="Money Sack">
-            <h3>The Royal Dawn Package</h3>
-            <p>Min: 1,000 KES | Return: 25% per day | Duration: 1 day</p>
-            <button class="invest-btn" onclick="showInvestmentForm('The Royal Dawn Package', 1000, 1999)">Invest Now</button>
-        </div>
-
-        <div class="package">
-            <img src="https://via.placeholder.com/100x100" alt="Money Sack">
-            <h3>The Imperial Sunrise Package</h3>
-            <p>Min: 2,000 KES | Return: 30% per day | Duration: 1 day</p>
-            <button class="invest-btn" onclick="showInvestmentForm('The Imperial Sunrise Package', 2000, 4999)">Invest Now</button>
-        </div>
-
-        <h2>30-Day Packages</h2>
-        <div class="package">
-            <img src="https://via.placeholder.com/100x100" alt="Treasure Chest">
-            <h3>The Crowned Legacy Package</h3>
-            <p>Min: 2,000 KES | Return: 40% per month | Duration: 30 days</p>
-            <button class="invest-btn" onclick="showInvestmentForm('The Crowned Legacy Package', 2000, 4999)">Invest Now</button>
-        </div>
-
-        <h2>6-Month Packages</h2>
-        <div class="package">
-            <img src="https://via.placeholder.com/100x100" alt="Gold Vault">
-            <h3>The Emperor’s Blessing Package</h3>
-            <p>Min: 5,000 KES | Return: 50% every 6 months | Duration: 6 months</p>
-            <button class="invest-btn" onclick="showInvestmentForm('The Emperor’s Blessing Package', 5000, 1000000)">Invest Now</button>
-        </div>
-    </div>
-
-    <!-- Investment Amount Input Section (Hidden by Default) -->
-    <div class="amount-input hidden" id="investmentForm">
-        <h2 id="selectedPackageTitle"></h2>
-        <p id="selectedPackageDetails"></p>
+        <h2 id="packageTitle"></h2>
+        <p id="packageDetails"></p>
         <input type="number" id="investmentAmount" placeholder="Enter amount" required><br>
         <button onclick="confirmInvestment()">Submit Investment</button>
     </div>
 
     <script>
-        let minAmount = 1000, maxAmount = 1999; // Default values
-        let selectedPackage = "";
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const packageName = urlParams.get('package');
+        const minAmount = parseInt(urlParams.get('min'), 10);
+        const maxAmount = parseInt(urlParams.get('max'), 10);
 
-        function showInvestmentForm(packageName, min, max) {
-            selectedPackage = packageName;
-            minAmount = min;
-            maxAmount = max;
-
-            document.getElementById("selectedPackageTitle").innerText = packageName;
-            document.getElementById("selectedPackageDetails").innerText = `Enter an amount between ${minAmount} KES and ${maxAmount} KES`;
-            
-            // Show the investment input form
-            document.getElementById("investmentForm").classList.remove("hidden");
-
-            // Scroll to the investment form smoothly
-            document.getElementById("investmentForm").scrollIntoView({ behavior: "smooth" });
-        }
+        // Display package details
+        document.getElementById("packageTitle").innerText = packageName;
+        document.getElementById("packageDetails").innerText = `Enter an amount between ${minAmount} KES and ${maxAmount} KES`;
 
         function confirmInvestment() {
             let amount = parseInt(document.getElementById("investmentAmount").value, 10);
@@ -129,8 +57,8 @@
                 return;
             }
 
-            alert(`Investment of ${amount} KES in ${selectedPackage} confirmed! Redirecting to your dashboard...`);
-            window.location.href = "dashboard.html"; // Redirect to dashboard
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
         }
     </script>
 
