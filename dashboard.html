@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Elysian Investment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #003580;
+            font-size: 2.5em;
+        }
+        p {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .italic {
+            font-style: italic;
+        }
+        .packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 80%;
+        }
+        .package {
+            background: linear-gradient(135deg, #0071c2, #005bb5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            transition: transform 0.3s;
+        }
+        .package:hover {
+            transform: scale(1.05);
+        }
+        .package img {
+            width: 80px;
+            height: 80px;
+        }
+        .invest-btn {
+            background-color: #ffb700;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .invest-btn:hover {
+            background-color: #cc9200;
+        }
+    </style>
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+        }
+
+        function signUp() {
+            let name = document.getElementById("signup-name").value;
+            let email = document.getElementById("signup-email").value;
+            let password = document.getElementById("signup-password").value;
+            localStorage.setItem("userName", name);
+            localStorage.setItem(email, password);
+            showPage('signInPage');
+        }
+
+        function signIn() {
+            let email = document.getElementById("signin-email").value;
+            let password = document.getElementById("signin-password").value;
+            if (localStorage.getItem(email) === password) {
+                showPage('elysianInvestmentPage');
+            }
+        }
+
+        function invest() {
+            showPage('dashboardPage');
+            document.getElementById("dashboardUser").innerText = localStorage.getItem("userName");
+        }
+    </script>
+</head>
+<body>
+    <div id="signUpPage" class="container page">
+        <h1>Sign Up</h1>
+        <input type="text" id="signup-name" placeholder="Full Name"><br>
+        <input type="text" id="signup-email" placeholder="Email"><br>
+        <input type="password" id="signup-password" placeholder="Password"><br>
+        <button onclick="signUp()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showPage('signInPage')">Sign In</a></p>
+    </div>
+
+    <div id="signInPage" class="container page" style="display:none;">
+        <h1>Sign In</h1>
+        <input type="text" id="signin-email" placeholder="Email"><br>
+        <input type="password" id="signin-password" placeholder="Password"><br>
+        <button onclick="signIn()">Sign In</button>
+    </div>
+
+    <div id="elysianInvestmentPage" class="container page" style="display:none;">
+        <h1>The Elysian Investment</h1>
+        <p class="italic"><strong>Where Elites Meet To Grow Their Financial Pockets</strong></p>
+        <div class="packages">
+            <div class="package">
+                <img src="https://via.placeholder.com/100x100" alt="Money Sack">
+                <h3>The Royal Dawn Package</h3>
+                <p>Min: 1,000 KES</p>
+                <p>Return: 25% per day</p>
+                <p>Duration: 1 day</p>
+                <button class="invest-btn" onclick="invest()">Invest Now</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardPage" class="container page" style="display:none;">
+        <h1>Welcome, <span id="dashboardUser"></span></h1>
+        <p>Welcome to your investment dashboard. Here you can track your investments and manage your account.</p>
+        <button onclick="showPage('elysianInvestmentPage')">Back to Investments</button>
+    </div>
+</body>
+</html>
