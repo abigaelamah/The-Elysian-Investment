@@ -60,6 +60,16 @@
             return /^\+254\d{9}$/.test(phone);
         }
 
+        function showSignup() {
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('signup').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('signup').classList.add('hidden');
+            document.getElementById('login').classList.remove('hidden');
+        }
+
         function signup() {
             let firstName = document.getElementById('firstName').value;
             let lastName = document.getElementById('lastName').value;
