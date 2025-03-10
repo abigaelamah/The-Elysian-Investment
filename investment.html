@@ -3,95 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elysian Investment</title>
+    <title>The Elysian Investment</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: linear-gradient(to right, #1E3A8A, #9333EA, #E91E63); color: white; }
-        .container { max-width: 500px; margin: auto; padding: 20px; background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-        button, input { width: 85%; padding: 10px; margin: 10px 0; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        button { background: gold; color: black; }
-        .hidden { display: none; }
-        .balance { font-size: 24px; font-weight: bold; color: gold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #003580;
+            font-size: 2.5em;
+        }
+        p {
+            font-size: 1.2em;
+            color: #333;
+        }
+        .italic {
+            font-style: italic;
+        }
+        .packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 80%;
+        }
+        .package {
+            background: linear-gradient(135deg, #0071c2, #005bb5);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: white;
+            transition: transform 0.3s;
+        }
+        .package:hover {
+            transform: scale(1.05);
+        }
+        .package img {
+            width: 80px;
+            height: 80px;
+        }
+        .invest-btn {
+            background-color: #ffb700;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .invest-btn:hover {
+            background-color: #cc9200;
+        }
     </style>
-</head>
-<body>
-
-    <!-- Investment Plan Selection -->
-    <div id="page-investment" class="container">
-        <h2>Select an Investment Package</h2>
-        <button class="package" onclick="selectPackage('The Royal Dawn Package', 1000, 1999)">The Royal Dawn Package</button>
-        <button class="package" onclick="selectPackage('The Crowned Legacy Package', 2000, 4999)">The Crowned Legacy Package</button>
-        <button class="package" onclick="selectPackage('The Emperor’s Blessing Package', 5000, 1000000)">The Emperor’s Blessing Package</button>
-    </div>
-
-    <!-- Enter Investment Amount -->
-    <div id="page-amount" class="container hidden">
-        <h2 id="packageTitle"></h2>
-        <p id="packageDetails"></p>
-        <input type="number" id="investmentAmount" placeholder="Enter amount">
-        <button onclick="submitInvestment()">Submit Investment</button>
-    </div>
-
-    <!-- Deposit Funds -->
-    <div id="page-deposit" class="container hidden">
-        <h2>Deposit Funds</h2>
-        <p>To proceed, deposit your investment amount.</p>
-        <input type="number" id="depositAmount" placeholder="Enter deposit amount">
-        <button onclick="confirmDeposit()">Deposit & Continue</button>
-    </div>
-
-    <!-- Dashboard -->
-    <div id="page-dashboard" class="container hidden">
-        <h2>Welcome, <span id="userName">User</span></h2>
-        <p>Your Account Balance: <span class="balance" id="accountBalance">0.00 KES</span></p>
-        <button onclick="showPage('page-deposit')">Deposit</button>
-        <button onclick="alert('Withdrawals feature coming soon.')">Withdraw</button>
-    </div>
-
     <script>
         function showPage(pageId) {
-            document.getElementById("page-investment").classList.add("hidden");
-            document.getElementById("page-amount").classList.add("hidden");
-            document.getElementById("page-deposit").classList.add("hidden");
-            document.getElementById("page-dashboard").classList.add("hidden");
-            document.getElementById(pageId).classList.remove("hidden");
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
         }
 
-        function selectPackage(packageName, min, max) {
-            localStorage.setItem("selectedPackage", packageName);
-            localStorage.setItem("minAmount", min);
-            localStorage.setItem("maxAmount", max);
-            document.getElementById("packageTitle").innerText = packageName;
-            document.getElementById("packageDetails").innerText = `Enter an amount between ${min} KES and ${max} KES`;
-            showPage("page-amount");
+        function signUp() {
+            let email = document.getElementById("signup-email").value;
+            let password = document.getElementById("signup-password").value;
+            localStorage.setItem(email, password);
+            showPage('signInPage');
         }
 
-        function submitInvestment() {
-            let amount = parseInt(document.getElementById("investmentAmount").value, 10);
-            let minAmount = parseInt(localStorage.getItem("minAmount"), 10);
-            let maxAmount = parseInt(localStorage.getItem("maxAmount"), 10);
-
-            if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
-                alert(`Invalid amount! Enter between ${minAmount} KES and ${maxAmount} KES.`);
-                return;
+        function signIn() {
+            let email = document.getElementById("signin-email").value;
+            let password = document.getElementById("signin-password").value;
+            if (localStorage.getItem(email) === password) {
+                showPage('elysianInvestmentPage');
             }
-
-            localStorage.setItem("investmentAmount", amount);
-            showPage("page-deposit");
-        }
-
-        function confirmDeposit() {
-            let deposit = parseInt(document.getElementById("depositAmount").value, 10);
-
-            if (isNaN(deposit) || deposit <= 0) {
-                alert("Please enter a valid deposit amount.");
-                return;
-            }
-
-            localStorage.setItem("accountBalance", deposit);
-            document.getElementById("accountBalance").innerText = deposit + " KES";
-            showPage("page-dashboard");
         }
     </script>
+</head>
+<body>
+    <div id="signUpPage" class="container page">
+        <h1>Sign Up</h1>
+        <input type="text" id="signup-email" placeholder="Email"><br>
+        <input type="password" id="signup-password" placeholder="Password"><br>
+        <button onclick="signUp()">Sign Up</button>
+        <p>Already have an account? <a href="#" onclick="showPage('signInPage')">Sign In</a></p>
+    </div>
 
+    <div id="signInPage" class="container page" style="display:none;">
+        <h1>Sign In</h1>
+        <input type="text" id="signin-email" placeholder="Email"><br>
+        <input type="password" id="signin-password" placeholder="Password"><br>
+        <button onclick="signIn()">Sign In</button>
+    </div>
+
+    <div id="elysianInvestmentPage" class="container page" style="display:none;">
+        <h1>The Elysian Investment</h1>
+        <p class="italic"><strong>Where Elites Meet To Grow Their Financial Pockets</strong></p>
+        <div class="packages">
+            <div class="package">
+                <img src="https://via.placeholder.com/100x100" alt="Money Sack">
+                <h3>The Royal Dawn Package</h3>
+                <p>Min: 1,000 KES</p>
+                <p>Return: 25% per day</p>
+                <p>Duration: 1 day</p>
+                <button class="invest-btn">Invest Now</button>
+            </div>
+            <div class="package">
+                <img src="https://via.placeholder.com/100x100" alt="Money Sack">
+                <h3>The Crowned Legacy Package</h3>
+                <p>Min: 5,000 KES</p>
+                <p>Return: 50% per month</p>
+                <p>Duration: 30 days</p>
+                <button class="invest-btn">Invest Now</button>
+            </div>
+            <div class="package">
+                <img src="https://via.placeholder.com/100x100" alt="Treasure Chest">
+                <h3>The Emperor’s Blessing Package</h3>
+                <p>Min: 10,000 KES</p>
+                <p>Return: 200% in 6 months</p>
+                <p>Duration: 6 months</p>
+                <button class="invest-btn">Invest Now</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
