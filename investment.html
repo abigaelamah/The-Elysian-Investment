@@ -36,6 +36,23 @@
             border-radius: 5px;
             margin-top: 10px;
         }
+        .hidden { display: none; } /* Hide elements initially */
+        .amount-input { 
+            background: rgba(255, 255, 255, 0.2); 
+            padding: 15px; 
+            border-radius: 10px; 
+            max-width: 400px; 
+            margin: auto;
+        }
+        input, button { 
+            width: 90%; 
+            padding: 10px; 
+            margin: 5px 0; 
+            border: none; 
+            border-radius: 5px; 
+        }
+        button { background-color: #E91E63; color: white; cursor: pointer; }
+        button:hover { background-color: #C2185B; }
     </style>
 </head>
 <body>
@@ -44,44 +61,76 @@
         <h1>Welcome to Elysian Investments</h1>
         <p>Choose an investment package that suits you best.</p>
 
-        <!-- Daily Packages -->
+        <!-- Investment Packages -->
         <h2>Daily Packages</h2>
         <div class="package">
             <img src="https://via.placeholder.com/100x100" alt="Money Sack">
             <h3>The Royal Dawn Package</h3>
             <p>Min: 1,000 KES | Return: 25% per day | Duration: 1 day</p>
-            <button class="invest-btn" onclick="invest('The Royal Dawn Package')">Invest Now</button>
+            <button class="invest-btn" onclick="showInvestmentForm('The Royal Dawn Package', 1000, 1999)">Invest Now</button>
         </div>
+
         <div class="package">
             <img src="https://via.placeholder.com/100x100" alt="Money Sack">
             <h3>The Imperial Sunrise Package</h3>
             <p>Min: 2,000 KES | Return: 30% per day | Duration: 1 day</p>
-            <button class="invest-btn" onclick="invest('The Imperial Sunrise Package')">Invest Now</button>
+            <button class="invest-btn" onclick="showInvestmentForm('The Imperial Sunrise Package', 2000, 4999)">Invest Now</button>
         </div>
 
-        <!-- 30-Day Packages -->
         <h2>30-Day Packages</h2>
         <div class="package">
             <img src="https://via.placeholder.com/100x100" alt="Treasure Chest">
             <h3>The Crowned Legacy Package</h3>
             <p>Min: 2,000 KES | Return: 40% per month | Duration: 30 days</p>
-            <button class="invest-btn" onclick="invest('The Crowned Legacy Package')">Invest Now</button>
+            <button class="invest-btn" onclick="showInvestmentForm('The Crowned Legacy Package', 2000, 4999)">Invest Now</button>
         </div>
 
-        <!-- 6-Month Packages -->
         <h2>6-Month Packages</h2>
         <div class="package">
             <img src="https://via.placeholder.com/100x100" alt="Gold Vault">
             <h3>The Emperor’s Blessing Package</h3>
             <p>Min: 5,000 KES | Return: 50% every 6 months | Duration: 6 months</p>
-            <button class="invest-btn" onclick="invest('The Emperor’s Blessing Package')">Invest Now</button>
+            <button class="invest-btn" onclick="showInvestmentForm('The Emperor’s Blessing Package', 5000, 1000000)">Invest Now</button>
         </div>
     </div>
 
+    <!-- Investment Amount Input Section (Hidden by Default) -->
+    <div class="amount-input hidden" id="investmentForm">
+        <h2 id="selectedPackageTitle"></h2>
+        <p id="selectedPackageDetails"></p>
+        <input type="number" id="investmentAmount" placeholder="Enter amount" required><br>
+        <button onclick="confirmInvestment()">Submit Investment</button>
+    </div>
+
     <script>
-        function invest(packageName) {
-            // Redirect to package selection page with the selected package
-            window.location.href = `package_selection.html?package=${encodeURIComponent(packageName)}`;
+        let minAmount = 1000, maxAmount = 1999; // Default values
+        let selectedPackage = "";
+
+        function showInvestmentForm(packageName, min, max) {
+            selectedPackage = packageName;
+            minAmount = min;
+            maxAmount = max;
+
+            document.getElementById("selectedPackageTitle").innerText = packageName;
+            document.getElementById("selectedPackageDetails").innerText = `Enter an amount between ${minAmount} KES and ${maxAmount} KES`;
+            
+            // Show the investment input form
+            document.getElementById("investmentForm").classList.remove("hidden");
+
+            // Scroll to the investment form smoothly
+            document.getElementById("investmentForm").scrollIntoView({ behavior: "smooth" });
+        }
+
+        function confirmInvestment() {
+            let amount = parseInt(document.getElementById("investmentAmount").value, 10);
+
+            if (isNaN(amount) || amount < minAmount || amount > maxAmount) {
+                alert(`Invalid amount! Enter an amount between ${minAmount} KES and ${maxAmount} KES.`);
+                return;
+            }
+
+            alert(`Investment of ${amount} KES in ${selectedPackage} confirmed! Redirecting to your dashboard...`);
+            window.location.href = "dashboard.html"; // Redirect to dashboard
         }
     </script>
 
