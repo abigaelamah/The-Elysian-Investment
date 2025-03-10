@@ -71,36 +71,16 @@
         }
 
         function signup() {
-            let firstName = document.getElementById('firstName').value;
-            let lastName = document.getElementById('lastName').value;
             let email = document.getElementById('signupEmail').value;
             let phone = document.getElementById('phone').value;
             let password = document.getElementById('signupPassword').value;
             let confirmPassword = document.getElementById('confirmPassword').value;
             
-            if (!firstName || !lastName) {
-                alert('Please enter your full name.');
+            if (!validateEmail(email) || !validatePhone(phone) || password !== confirmPassword) {
+                alert('Invalid input. Ensure email, phone, and passwords match.');
                 return;
             }
-            if (!validateEmail(email)) {
-                alert('Please enter a valid Gmail address (e.g., example@gmail.com)');
-                return;
-            }
-            if (!validatePhone(phone)) {
-                alert('Please enter a valid phone number (e.g., +254712345678)');
-                return;
-            }
-            if (password !== confirmPassword) {
-                alert('Passwords do not match!');
-                return;
-            }
-            if (localStorage.getItem(email)) {
-                alert('This email is already registered. Please log in.');
-                return;
-            }
-
-            localStorage.setItem(email, JSON.stringify({ firstName, lastName, phone, password }));
-            alert('Signup successful! You can now log in.');
+            localStorage.setItem(email, JSON.stringify({ phone, password }));
             showLogin();
         }
 
@@ -109,18 +89,11 @@
             let password = document.getElementById('loginPassword').value;
             let userData = localStorage.getItem(email);
             
-            if (!userData) {
-                alert('This email is not registered. Please sign up first.');
+            if (!userData || JSON.parse(userData).password !== password) {
+                alert('Invalid credentials');
                 return;
             }
-            
-            let user = JSON.parse(userData);
-            if (user.password !== password) {
-                alert('Incorrect password!');
-                return;
-            }
-            
-            alert('Login successful! Welcome to Elysian Investments.');
+            window.location.href = "investment.html";
         }
     </script>
 </body>
